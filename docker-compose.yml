@@ -9,7 +9,22 @@ services:
       - ./data:/var/lib/mysql
     platform: linux/x86_64
     environment:
-      MYSQL_ROOT_PASSWORD: 123456
       MYSQL_DATABASE: app
       MYSQL_USER: app
       MYSQL_PASSWORD: pass
+
+  postgres:
+        image: postgres:latest
+        ports:
+          - '5432:5432'
+        volumes:
+          - ./data:/var/lib/postgres
+        environment:
+          POSTGRES_DB: app
+          POSTGRES_USER: app
+          POSTGRES_PASSWORD: pass
+
+  nodejs:
+    build: ./gate-simulator
+    ports:
+      - '9999:9999'
