@@ -68,7 +68,7 @@ public class PaymentCorrectCards {
     public void failResultIfDeclinedCardBuyForm() {
         val cardInfo = getCardStatusDeclined();
         purchaseForm.completedPaymentForm(cardInfo);
-        purchaseForm.waitSuccessResult();
+        purchaseForm.waitError();
 
         val statusExpected = "DECLINED";
         val statusActual = getCardStatusForPayment();
