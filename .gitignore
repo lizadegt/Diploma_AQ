@@ -1,7 +1,7 @@
 HELP.md
 .gradle
 build/
-
+data/
 ### STS ###
 .apt_generated
 .classpath
@@ -24,7 +24,7 @@ out/
 /dist/
 /nbdist/
 /.nb-gradle/
-/data/
+
 
 ### VS Code ###
 .vscode/
