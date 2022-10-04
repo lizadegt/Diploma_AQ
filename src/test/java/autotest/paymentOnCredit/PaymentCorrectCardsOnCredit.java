@@ -7,8 +7,8 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import page.CreditPage;
 import page.MainPage;
-import page.PurchaseForm;
 
 import static com.codeborne.selenide.Selenide.open;
 import static data.DataHelper.getCardStatusApproved;
@@ -18,8 +18,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class PaymentCorrectCardsOnCredit {
-    private PurchaseForm purchaseForm = new PurchaseForm();
-    private MainPage mainPage = new MainPage();
+    MainPage mainPage;
+    CreditPage creditPage;
 
     @BeforeAll
     static void setUpAll() {
@@ -34,19 +34,15 @@ public class PaymentCorrectCardsOnCredit {
     @BeforeEach
     void shouldOpen() {
         String sutUrl = System.getProperty("sut.url");
-        open(sutUrl);
-    }
-
-    @BeforeEach
-    public void clickBuy() {
-        mainPage.clickBuyOnCredit();
+        mainPage = open(sutUrl, MainPage.class);
+        creditPage = mainPage.buyCredit();
     }
 
     @Test
     public void successResultIfApprovedCardsBuyFormOnCredit() {
         val cardInfo = getCardStatusApproved();
-        purchaseForm.completedPaymentForm(cardInfo);
-        purchaseForm.waitSuccessResult();
+        creditPage.completedPaymentForm(cardInfo);
+        creditPage.waitSuccessResult();
 
         val statusExpected = "APPROVED";
         val statusActual = getCardStatusForPayment();
@@ -66,8 +62,8 @@ public class PaymentCorrectCardsOnCredit {
     @Test
     public void failResultIfDeclinedCardBuyFormOnCredit() {
         val cardInfo = getCardStatusDeclined();
-        purchaseForm.completedPaymentForm(cardInfo);
-        purchaseForm.waitSuccessResult();
+        creditPage.completedPaymentForm(cardInfo);
+        creditPage.waitSuccessResult();
 
         val statusExpected = "DECLINED";
         val statusActual = getCardStatusForPayment();

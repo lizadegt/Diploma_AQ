@@ -7,16 +7,15 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import page.CreditPage;
 import page.MainPage;
-import page.PurchaseForm;
 
 import static com.codeborne.selenide.Selenide.open;
 import static data.DataHelper.*;
-import static data.DataHelper.getCardCvcSymbols;
 
 public class CvcCheckOnCredit {
-    private PurchaseForm purchaseForm = new PurchaseForm();
-    private MainPage mainPage = new MainPage();
+    MainPage mainPage;
+    CreditPage creditPage;
 
     @BeforeAll
     static void setUpAll() {
@@ -31,53 +30,50 @@ public class CvcCheckOnCredit {
     @BeforeEach
     void shouldOpen() {
         String sutUrl = System.getProperty("sut.url");
-        open(sutUrl);
+        mainPage = open(sutUrl, MainPage.class);
+        creditPage = mainPage.buyCredit();
     }
 
-    @BeforeEach
-    public void clickBuy() {
-        mainPage.clickBuyOnCredit();
-    }
 
     @Test
     public void checkOnCreditCardCvcEmptyField() {
         val cardInfo = getCardCvcEmptyField();
-        purchaseForm.completedPaymentForm(cardInfo);
-        purchaseForm.waitThisFieldIsRequired();
+        creditPage.completedPaymentForm(cardInfo);
+        creditPage.waitThisFieldIsRequired();
     }
 
     @Test
     public void checkOnCreditCardCvcZeros() {
         val cardInfo = getCardCvcZeros();
-        purchaseForm.completedPaymentForm(cardInfo);
-        purchaseForm.waitIncorrectFormat();
+        creditPage.completedPaymentForm(cardInfo);
+        creditPage.waitIncorrectFormat();
     }
 
     @Test
     public void checkOnCreditCardCvcOneDigit() {
         val cardInfo = getCardCvcOneDigit();
-        purchaseForm.completedPaymentForm(cardInfo);
-        purchaseForm.waitIncorrectFormat();
+        creditPage.completedPaymentForm(cardInfo);
+        creditPage.waitIncorrectFormat();
     }
 
     @Test
     public void checkOnCreditCardCvcTwoDigit() {
         val cardInfo = getCardCvcTwoDigit();
-        purchaseForm.completedPaymentForm(cardInfo);
-        purchaseForm.waitIncorrectFormat();
+        creditPage.completedPaymentForm(cardInfo);
+        creditPage.waitIncorrectFormat();
     }
 
     @Test
     public void checkOnCreditCardCvcLetters() {
         val cardInfo = getCardCvcLetters();
-        purchaseForm.completedPaymentForm(cardInfo);
-        purchaseForm.waitThisFieldIsRequired();
+        creditPage.completedPaymentForm(cardInfo);
+        creditPage.waitThisFieldIsRequired();
     }
 
     @Test
     public void checkOnCreditCardCvcSymbols() {
         val cardInfo = getCardCvcSymbols();
-        purchaseForm.completedPaymentForm(cardInfo);
-        purchaseForm.waitThisFieldIsRequired();
+        creditPage.completedPaymentForm(cardInfo);
+        creditPage.waitThisFieldIsRequired();
     }
 }

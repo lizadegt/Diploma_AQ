@@ -26,21 +26,6 @@ public class SQL {
         return connection;
     }
 
-    public static void dropDataBase() {
-        val runner = new QueryRunner();
-        val order = "DELETE FROM order_entity";
-        val payment = "DELETE FROM payment_entity";
-        val creditRequest = "DELETE FROM credit_request_entity";
-
-        try (val connection = getConnection()) {
-            runner.update(connection, order);
-            runner.update(connection, payment);
-            runner.update(connection, creditRequest);
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-        }
-    }
-
     public static String getCardStatusForPayment() {
         String statusQuery = "SELECT * FROM payment_entity";
         val runner = new QueryRunner();
@@ -53,17 +38,6 @@ public class SQL {
         return null;
     }
 
-    public static String getCardStatusForCreditRequest() {
-        String statusQuery = "SELECT * FROM credit_request_entity";
-        val runner = new QueryRunner();
-        try (Connection connection = getConnection()) {
-            val cardStatus = runner.query(connection, statusQuery, new BeanHandler<>(CreditRequestEntity.class));
-            return cardStatus.getStatus();
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-        }
-        return null;
-    }
 
     public static String getBankId() {
         String bankIdQuery = "SELECT * FROM credit_request_entity";

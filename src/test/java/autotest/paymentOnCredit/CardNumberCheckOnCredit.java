@@ -7,15 +7,15 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import page.CreditPage;
 import page.MainPage;
-import page.PurchaseForm;
 
 import static com.codeborne.selenide.Selenide.open;
 import static data.DataHelper.*;
 
 public class CardNumberCheckOnCredit {
-    private PurchaseForm purchaseForm = new PurchaseForm();
-    private MainPage mainPage = new MainPage();
+    MainPage mainPage;
+    CreditPage creditPage;
 
     @BeforeAll
     static void setUpAll() {
@@ -30,53 +30,49 @@ public class CardNumberCheckOnCredit {
     @BeforeEach
     void shouldOpen() {
         String sutUrl = System.getProperty("sut.url");
-        open(sutUrl);
+        mainPage = open(sutUrl, MainPage.class);
+        creditPage = mainPage.buyCredit();
     }
 
-    @BeforeEach
-    public void clickBuy() {
-        mainPage.clickBuyOnCredit();
-    }
 
     @Test
     public void checkOnCreditCardNumberUnknown() {
         val cardInfo = getCardNumberUnknown();
-        purchaseForm.completedPaymentForm(cardInfo);
-        purchaseForm.waitError();
+        creditPage.completedPaymentForm(cardInfo);
+        creditPage.waitError();
     }
 
     @Test
     public void checkOnCreditCardNumberEmptyField() {
         val cardInfo = getCardNumberEmptyField();
-        purchaseForm.completedPaymentForm(cardInfo);
-        purchaseForm.waitThisFieldIsRequired();
+        creditPage.waitThisFieldIsRequired();
     }
 
     @Test
     public void checkOnCreditCardNumber15Numerals() {
         val cardInfo = getCardNumber15Numerals();
-        purchaseForm.completedPaymentForm(cardInfo);
-        purchaseForm.waitIncorrectFormat();
+        creditPage.completedPaymentForm(cardInfo);
+        creditPage.waitIncorrectFormat();
     }
 
     @Test
     public void checkOnCreditCardNumberZeros() {
         val cardInfo = getCardNumberZeros();
-        purchaseForm.completedPaymentForm(cardInfo);
-        purchaseForm.waitIncorrectFormat();
+        creditPage.completedPaymentForm(cardInfo);
+        creditPage.waitIncorrectFormat();
     }
 
     @Test
     public void checkOnCreditCardNumberText() {
         val cardInfo = getCardNumberText();
-        purchaseForm.completedPaymentForm(cardInfo);
-        purchaseForm.waitThisFieldIsRequired();
+        creditPage.completedPaymentForm(cardInfo);
+        creditPage.waitThisFieldIsRequired();
     }
 
     @Test
     public void checkOnCreditCardNumberSymbols() {
         val cardInfo = getCardNumberSymbols();
-        purchaseForm.completedPaymentForm(cardInfo);
-        purchaseForm.waitThisFieldIsRequired();
+        creditPage.completedPaymentForm(cardInfo);
+        creditPage.waitThisFieldIsRequired();
     }
 }

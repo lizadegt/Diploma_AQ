@@ -7,16 +7,15 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import page.CreditPage;
 import page.MainPage;
-import page.PurchaseForm;
 
 import static com.codeborne.selenide.Selenide.open;
 import static data.DataHelper.*;
-import static data.DataHelper.getCardMonthOver12;
 
 public class MonthCheckOnCredit {
-    private PurchaseForm purchaseForm = new PurchaseForm();
-    private MainPage mainPage = new MainPage();
+    MainPage mainPage;
+    CreditPage creditPage;
 
     @BeforeAll
     static void setUpAll() {
@@ -31,53 +30,50 @@ public class MonthCheckOnCredit {
     @BeforeEach
     void shouldOpen() {
         String sutUrl = System.getProperty("sut.url");
-        open(sutUrl);
+        mainPage = open(sutUrl, MainPage.class);
+        creditPage = mainPage.buyCredit();
     }
 
-    @BeforeEach
-    public void clickBuy() {
-        mainPage.clickBuyOnCredit();
-    }
 
     @Test
     public void checkOnCreditCardMonthEmptyField() {
         val cardInfo = getCardMonthEmptyField();
-        purchaseForm.completedPaymentForm(cardInfo);
-        purchaseForm.waitThisFieldIsRequired();
+        creditPage.completedPaymentForm(cardInfo);
+        creditPage.waitThisFieldIsRequired();
     }
 
     @Test
     public void checkOnCreditCardMonthOneNumeral() {
         val cardInfo = getCardMonthOneNumeral();
-        purchaseForm.completedPaymentForm(cardInfo);
-        purchaseForm.waitIncorrectFormat();
+        creditPage.completedPaymentForm(cardInfo);
+        creditPage.waitIncorrectFormat();
     }
 
     @Test
     public void checkOnCreditCardMonthZeros() {
         val cardInfo = getCardMonthZeros();
-        purchaseForm.completedPaymentForm(cardInfo);
-        purchaseForm.waitIncorrectFormat();
+        creditPage.completedPaymentForm(cardInfo);
+        creditPage.waitIncorrectFormat();
     }
 
     @Test
     public void checkOnCreditCardMonthLetters() {
         val cardInfo = getCardMonthLetters();
-        purchaseForm.completedPaymentForm(cardInfo);
-        purchaseForm.waitThisFieldIsRequired();
+        creditPage.completedPaymentForm(cardInfo);
+        creditPage.waitThisFieldIsRequired();
     }
 
     @Test
     public void checkOnCreditCardMonthSymbols() {
         val cardInfo = getCardMonthSymbols();
-        purchaseForm.completedPaymentForm(cardInfo);
-        purchaseForm.waitThisFieldIsRequired();
+        creditPage.completedPaymentForm(cardInfo);
+        creditPage.waitThisFieldIsRequired();
     }
 
     @Test
     public void checkOnCreditCardMonthOver12() {
         val cardInfo = getCardMonthOver12();
-        purchaseForm.completedPaymentForm(cardInfo);
-        purchaseForm.waitInvalidCardExpirationDate();
+        creditPage.completedPaymentForm(cardInfo);
+        creditPage.waitInvalidCardExpirationDate();
     }
 }

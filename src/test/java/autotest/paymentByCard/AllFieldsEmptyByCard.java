@@ -11,15 +11,15 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import page.MainPage;
-import page.PurchaseForm;
+import page.PaymentPage;
 
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.open;
 import static data.DataHelper.getCardAllFieldsEmpty;
 
 public class AllFieldsEmptyByCard {
-    private PurchaseForm purchaseForm = new PurchaseForm();
-    private MainPage mainPage = new MainPage();
+    MainPage mainPage;
+    PaymentPage paymentPage;
 
     @BeforeAll
     static void setUpAll() {
@@ -34,19 +34,16 @@ public class AllFieldsEmptyByCard {
     @BeforeEach
     void shouldOpen() {
         String sutUrl = System.getProperty("sut.url");
-        open(sutUrl);
+        mainPage = open(sutUrl, MainPage.class);
+        paymentPage = mainPage.buyCard();
     }
 
-    @BeforeEach
-    public void clickBuy() {
-        mainPage.clickBuy();
-    }
 
     @Test
-    public void  checkByCardAllFieldsEmpty() {
+    public void checkByCardAllFieldsEmpty() {
         val cardInfo = getCardAllFieldsEmpty();
-        purchaseForm.completedPaymentForm(cardInfo);
-        purchaseForm.waitThisFieldIsRequired();
+        paymentPage.completedPaymentForm(cardInfo);
+        paymentPage.waitThisFieldIsRequired();
         final ElementsCollection emptyField = $$(".input__sub");
         final SelenideElement cardNumberField = emptyField.get(1);
         final SelenideElement monthField = emptyField.get(2);

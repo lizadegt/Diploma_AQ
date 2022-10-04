@@ -8,14 +8,21 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import page.MainPage;
-import page.PurchaseForm;
+import page.PaymentPage;
 
 import static com.codeborne.selenide.Selenide.open;
 import static data.DataHelper.*;
 
 public class YearCheckByCard {
-    private PurchaseForm purchaseForm = new PurchaseForm();
-    private MainPage mainPage = new MainPage();
+    MainPage mainPage;
+    PaymentPage paymentPage;
+
+    @BeforeEach
+    void shouldOpen() {
+        String sutUrl = System.getProperty("sut.url");
+        mainPage = open(sutUrl, MainPage.class);
+        paymentPage = mainPage.buyCard();
+    }
 
     @BeforeAll
     static void setUpAll() {
@@ -27,63 +34,54 @@ public class YearCheckByCard {
         SelenideLogger.removeListener("allure");
     }
 
-    @BeforeEach
-    void shouldOpen() {
-        String sutUrl = System.getProperty("sut.url");
-        open(sutUrl);
-    }
 
-    @BeforeEach
-    public void clickBuy() {
-        mainPage.clickBuy();
-    }
 
     @Test
     public void checkByCardYearEmptyField() {
         val cardInfo = getCardYearEmptyField();
-        purchaseForm.completedPaymentForm(cardInfo);
-        purchaseForm.waitThisFieldIsRequired();
+        paymentPage.completedPaymentForm(cardInfo);
+        paymentPage.waitThisFieldIsRequired();
     }
 
     @Test
     public void checkByCardYearOneNumeral() {
         val cardInfo = getCardYearOneNumeral();
-        purchaseForm.completedPaymentForm(cardInfo);
-        purchaseForm.waitIncorrectFormat();
+        paymentPage.completedPaymentForm(cardInfo);
+        paymentPage.waitIncorrectFormat();
     }
 
     @Test
     public void checkByCardYearZeros() {
         val cardInfo = getCardYearZeros();
-        purchaseForm.completedPaymentForm(cardInfo);
-        purchaseForm.waitCardExpired();
+        paymentPage.completedPaymentForm(cardInfo);
+        paymentPage.waitCardExpired();
     }
 
     @Test
     public void checkByCardYearOver27() {
         val cardInfo = getCardYearOver27();
-        purchaseForm.completedPaymentForm(cardInfo);
-        purchaseForm.waitInvalidCardExpirationDate();
+        paymentPage.completedPaymentForm(cardInfo);
+        paymentPage.waitInvalidCardExpirationDate();
     }
 
     @Test
     public void checkByCardYearLess22() {
         val cardInfo = getCardYearLess22();
-        purchaseForm.completedPaymentForm(cardInfo);
-        purchaseForm.waitCardExpired();
+        paymentPage.completedPaymentForm(cardInfo);
+        paymentPage.waitCardExpired();
     }
 
     @Test
     public void checkByCardYearText() {
         val cardInfo = getCardYearText();
-        purchaseForm.completedPaymentForm(cardInfo);
-        purchaseForm.waitThisFieldIsRequired();
+        paymentPage.completedPaymentForm(cardInfo);
+        paymentPage.waitThisFieldIsRequired();
     }
 
     @Test
     public void checkByCardYearSymbols() {
         val cardInfo = getCardYearSymbols();
-        purchaseForm.completedPaymentForm(cardInfo);
-        purchaseForm.waitThisFieldIsRequired();
+        paymentPage.completedPaymentForm(cardInfo);
+        paymentPage.waitThisFieldIsRequired();
     }
 }

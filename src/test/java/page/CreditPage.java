@@ -1,16 +1,17 @@
 package page;
 
-
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import data.DataHelper;
 
+import java.time.Duration;
+
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
-public class PurchaseForm {
+public class CreditPage {
     private final SelenideElement numberCardField = $("input[placeholder='0000 0000 0000 0000']");
     private final SelenideElement monthField = $("input[placeholder='08']");
     private final SelenideElement yearField = $("input[placeholder='22']");
@@ -37,27 +38,26 @@ public class PurchaseForm {
 
 
     public void waitInvalidCardExpirationDate() {
-        invalidCardExpirationDate.shouldBe(Condition.visible);
+        invalidCardExpirationDate.shouldBe(visible);
     }
 
     public void waitIncorrectFormat() {
-        incorrectFormat.shouldBe(Condition.visible);
+        incorrectFormat.shouldBe(visible);
     }
 
     public void waitError() {
-        error.shouldBe(Condition.visible);
+        error.shouldBe(visible, Duration.ofSeconds(10));
     }
 
     public void waitCardExpired() {
-        cardExpired.shouldBe(Condition.visible);
+        cardExpired.shouldBe(visible);
     }
 
     public void waitThisFieldIsRequired() {
-        thisFieldIsRequired.shouldBe(Condition.visible);
+        thisFieldIsRequired.shouldBe(visible);
     }
 
     public void waitSuccessResult() {
-        successResult.shouldBe(Condition.visible);
+        successResult.shouldBe(visible, Duration.ofSeconds(10));
     }
-
 }
