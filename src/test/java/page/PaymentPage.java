@@ -1,5 +1,6 @@
 package page;
 
+import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import data.DataHelper;
@@ -8,8 +9,7 @@ import java.time.Duration;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.withText;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.Selenide.*;
 
 public class PaymentPage {
     private final SelenideElement numberCardField = $("input[placeholder='0000 0000 0000 0000']");
@@ -27,7 +27,7 @@ public class PaymentPage {
     private final SelenideElement thisFieldIsRequired = $(withText("Поле обязательно для заполнения"));
     private final SelenideElement continueField = $(withText("Продолжить"));
 
-    public void completedPaymentForm(DataHelper.CardInfo cardInfo) {
+     public void completedPaymentForm(DataHelper.CardInfo cardInfo) {
         numberCardField.setValue(cardInfo.getNumber());
         monthField.setValue(cardInfo.getMonth());
         yearField.setValue(cardInfo.getYear());
@@ -36,6 +36,9 @@ public class PaymentPage {
         continueField.click();
     }
 
+    public void waitForErrorNotificationsForAllFields() {
+        $$(".input__sub").shouldHave(CollectionCondition.size(5)).shouldHave(CollectionCondition.texts("Поле обязательно для заполнения"));
+    }
 
     public void waitInvalidCardExpirationDate() {
         invalidCardExpirationDate.shouldBe(visible);

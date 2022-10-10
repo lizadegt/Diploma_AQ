@@ -1,5 +1,6 @@
 package page;
 
+import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import data.DataHelper;
@@ -36,6 +37,9 @@ public class CreditPage {
         continueField.click();
     }
 
+    public void waitForErrorNotificationsForAllFields() {
+        $$(".input__sub").shouldHave(CollectionCondition.size(5)).shouldHave(CollectionCondition.texts("Поле обязательно для заполнения"));
+    }
 
     public void waitInvalidCardExpirationDate() {
         invalidCardExpirationDate.shouldBe(visible);
